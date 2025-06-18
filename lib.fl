@@ -15,6 +15,27 @@ func println(val: Str) -> Void {
     C_VOLATILE("printf(\"%s\\n\", val);");
 }
 
+func atoi(s: Str) -> Int {
+    // Используем стандартную C-функцию atoi
+    C_VOLATILE("return atoi(s);");
+}
+
+func ftoa(f: Float) -> Str {
+    C_VOLATILE("""
+        char* buffer = (char*)malloc(32 * sizeof(char));
+        snprintf(buffer, 32, "%f", f);
+        return buffer;
+    """);
+}
+
+func itoa(i: Int) -> Str {
+    C_VOLATILE("""
+        char* buffer = (char*)malloc(32 * sizeof(char));
+        snprintf(buffer, 32, "%d", i);
+        return buffer;
+    """);
+}
+
 func readInt() -> Int {
     C_VOLATILE("""
         int v;
