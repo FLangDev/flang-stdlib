@@ -1,0 +1,51 @@
+struct Error {
+    message: Str;
+    code: Int;
+}
+
+func println(val: Int) -> Void {
+    C_VOLATILE("printf(\"%d\\n\", val);");
+}
+
+func println(val: Float) -> Void {
+    C_VOLATILE("printf(\"%f\\n\", val);");
+}
+
+func println(val: Str) -> Void {
+    C_VOLATILE("printf(\"%s\\n\", val);");
+}
+
+func readInt() -> Int {
+    C_VOLATILE("""
+        int v;
+        scanf("%d", &v);
+        while(getchar()!='\n');
+        return v;
+    """);
+}
+
+func readStr() -> Str {
+    C_VOLATILE("""
+        char* l = NULL;
+        size_t n = 0;
+        getline(&l, &n, stdin);
+        char* p = strchr(l, '\n');
+        if (p) *p = 0;
+        return l;
+    """);
+}
+
+func newIntArray(size: Int) -> [Int] {
+    C_VOLATILE("return (int*)malloc(size * sizeof(int));");
+}
+
+func newFloatArray(size: Int) -> [Float] {
+    C_VOLATILE("return (float*)malloc(size * sizeof(float));");
+}
+
+func divide(a: Int, b: Int) -> Int {
+    if (b == 0) {
+        throw Error{message: "Division by zero!", code: 101};
+    }
+    return a / b;
+}
