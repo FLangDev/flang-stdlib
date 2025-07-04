@@ -15,58 +15,57 @@ func println(val: Str) -> Void {
     C_VOLATILE("printf(\"%s\\n\", val);");
 }
 
-func atoi(s: Str) -> Int {
-    // Используем стандартную C-функцию atoi
-    C_VOLATILE("return atoi(s);");
-}
-
-func ftoa(f: Float) -> Str {
-    C_VOLATILE("""
-        char* buffer = (char*)malloc(32 * sizeof(char));
-        snprintf(buffer, 32, "%f", f);
-        return buffer;
-    """);
-}
-
-func itoa(i: Int) -> Str {
-    C_VOLATILE("""
-        char* buffer = (char*)malloc(32 * sizeof(char));
-        snprintf(buffer, 32, "%d", i);
-        return buffer;
-    """);
-}
-
 func readInt() -> Int {
     C_VOLATILE("""
         int v;
         scanf("%d", &v);
-        while(getchar()!='\n');
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
         return v;
     """);
 }
 
 func readStr() -> Str {
     C_VOLATILE("""
-        char* l = NULL;
-        size_t n = 0;
-        getline(&l, &n, stdin);
-        char* p = strchr(l, '\n');
+        char* line = NULL;
+        size_t len = 0;
+        getline(&line, &len, stdin);
+        
+        char* p = strchr(line, '\n');
         if (p) *p = 0;
-        return l;
+
+        char* result = (char*)GC_MALLOC(strlen(line) + 1);
+        strcpy(result, line);
+        free(line); 
+        
+        return result;
+    """);
+}
+
+func atoi(s: Str) -> Int {
+    C_VOLATILE("return atoi(s);");
+}
+
+func ftoa(f: Float) -> Str {
+    C_VOLATILE("""
+        char* buffer = (char*)GC_MALLOC(48);
+        snprintf(buffer, 48, "%f", f);
+        return buffer;
+    """);
+}
+
+func itoa(i: Int) -> Str {
+    C_VOLATILE("""
+        char* buffer = (char*)GC_MALLOC(12);
+        snprintf(buffer, 12, "%d", i);
+        return buffer;
     """);
 }
 
 func newIntArray(size: Int) -> [Int] {
-    C_VOLATILE("return (int*)malloc(size * sizeof(int));");
+    C_VOLATILE("return (int*)GC_MALLOC(size * sizeof(int));");
 }
 
 func newFloatArray(size: Int) -> [Float] {
-    C_VOLATILE("return (float*)malloc(size * sizeof(float));");
-}
-
-func divide(a: Int, b: Int) -> Int {
-    if (b == 0) {
-        throw Error{message: "Division by zero!", code: 101};
-    }
-    return a / b;
+    C_VOLATILE("return (float*)GC_MALLOC(size * sizeof(float));");
 }
