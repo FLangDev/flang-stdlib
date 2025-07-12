@@ -1,0 +1,11 @@
+func newIntArray(size: Int) -> [Int] {
+    C_VOLATILE("return (int*)GC_MALLOC(size * sizeof(int));");
+}
+
+func newFloatArray(size: Int) -> [Float] {
+    C_VOLATILE("return (float*)GC_MALLOC(size * sizeof(float));");
+}
+
+func newStringArray(size: Int) -> [Str] {
+    C_VOLATILE("return (const char*)GL_MALLOC(size * sizeof (const char*));");
+}
