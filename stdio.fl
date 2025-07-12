@@ -1,0 +1,39 @@
+func readStr() -> Str {
+    C_VOLATILE("""
+        #define READ_BUF_SIZE 1024
+        char* buffer = (char*)GC_MALLOC(READ_BUF_SIZE);
+
+        if (fgets(buffer, READ_BUF_SIZE, stdin) != NULL) {
+            char* p = strchr(buffer, '\n');
+            if (p) *p = '\0';
+            return buffer;
+        }
+        return "";
+    """);
+}
+
+func readInt() -> Int {
+    C_VOLATILE("""
+        int v;
+        scanf("%d", &v);
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+        return v;
+    """);
+}
+
+func println(val: Int) -> Void {
+    C_VOLATILE("printf(\"%d\\n\", val);");
+}
+
+func println(val: Float) -> Void {
+    C_VOLATILE("printf(\"%f\\n\", val);");
+}
+
+func println(val: Str) -> Void {
+    C_VOLATILE("printf(\"%s\\n\", val);");
+}
+
+func println(val: Bool) -> Void {
+    C_VOLATILE("printf(val ? \"true\" : \"false\"");
+}
