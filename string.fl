@@ -1,0 +1,38 @@
+func strlen(str: Str) -> Int {
+    C_VOLATILE("return sizeof (str);");
+}
+
+func substr(s: Str, start: Int, length: Int) -> Str {
+    C_VOLATILE("""
+        int original_len = strlen(s);
+        if (start < 0 || length < 0 || start > original_len) return "";
+
+        int L = (start + length > original_len) ? (original_len - start) : length;
+
+        char* sub = (char*)GC_MALLOC_ATOMIC(L + 1);
+        strncpy(sub, s + start, L);
+        sub[L] = '\\0';
+        return sub;
+    """);
+}
+
+func split(s: Str, delimiter: Str) -> [Str] {
+    C_VOLATILE("""
+        char **result = (char**)GC_MALLOC(sizeof(char*) * 64);
+        int count = 0;
+        char *str_copy = strdup(s);
+        char *saveptr;
+        char *token = strtok_r(str_copy, delimiter, &saveptr);
+
+        while(token != NULL) {
+            result[count] = (char*)GC_MALLOC_ATOMIC(strlen(token) + 1);
+            strcpy(result[count], token);
+            count++;
+            token = strtok_r(NULL, delimiter, &saveptr);
+        }
+
+        free(str_copy);
+        result[count] = NULL;
+        return result;
+    """);
+}
