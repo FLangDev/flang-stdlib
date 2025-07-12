@@ -1,0 +1,44 @@
+func read_file(path: Str) -> (Str, Error) {
+    C_VOLATILE("""
+        FILE *file = fopen(path, "rb");
+        if (!file) {
+            Error err = {"Could not open file", -1};
+            return (const struct { char* f0; struct Error f1; }){ .f0 = "", .f1 = err };
+        }
+
+        fseek(file, 0, SEEK_END);
+        long length = ftell(file);
+        fseek(file, 0, SEEK_SET);
+
+        char *content = (char*)GC_MALLOC(length + 1);
+        if (!content) {
+             Error err = {"Memory allocation failed", -2};
+             fclose(file);
+             return (const struct { char* f0; struct Error f1; }){ .f0 = "", .f1 = err };
+        }
+
+        fread(content, 1, length, file);
+        content[length] = '\0';
+        fclose(file);
+
+        Error success_err = {"", 0};
+        return (const struct { char* f0; struct Error f1; }){ .f0 = content, .f1 = success_err };
+    """);
+}
+
+func write_file(path: Str, content: Str) -> Error {
+    C_VOLATILE("""
+        FILE *file = fopen(path, "w");
+        if (!file) {
+            return (const struct Error){"Could not open file for writing", -1};
+        }
+
+        if (fprintf(file, "%s", content) < 0) {
+            fclose(file);
+            return (const struct Error){"Failed to write to file", -2};
+        }
+
+        fclose(file);
+        return (const struct Error){"", 0};
+    """);
+}
