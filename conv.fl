@@ -1,0 +1,23 @@
+func atoi(s: Str) -> Int {
+    C_VOLATILE("return atoi(s);");
+}
+
+func btoa(b: Bool) -> Str {
+    C_VOLATILE("return b ? \"true\" : \"false\"");
+}
+
+func ftoa(f: Float) -> Str {
+    C_VOLATILE("""
+        char* buffer = (char*)GC_MALLOC(48);
+        snprintf(buffer, 48, "%f", f);
+        return buffer;
+    """);
+}
+
+func itoa(i: Int) -> Str {
+    C_VOLATILE("""
+        char* buffer = (char*)GC_MALLOC(12);
+        snprintf(buffer, 12, "%d", i);
+        return buffer;
+    """);
+}
