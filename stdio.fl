@@ -35,5 +35,21 @@ func println(val: Str) -> Void {
 }
 
 func println(val: Bool) -> Void {
+    C_VOLATILE("printf(val ? \"true\" : \"false\"\n);");
+}
+
+func print(val: Int) -> Void {
+    C_VOLATILE("printf(\"%d\\", val);");
+}
+
+func print(val: Float) -> Void {
+    C_VOLATILE("printf(\"%f\\", val);");
+}
+
+func print(val: Str) -> Void {
+    C_VOLATILE("printf(\"%s\\", val);");
+}
+
+func print(val: Bool) -> Void {
     C_VOLATILE("printf(val ? \"true\" : \"false\");");
 }
