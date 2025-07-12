@@ -35,5 +35,5 @@ func println(val: Str) -> Void {
 }
 
 func println(val: Bool) -> Void {
-    C_VOLATILE("printf(val ? \"true\" : \"false\"");
+    C_VOLATILE("printf(val ? \"true\" : \"false\");");
 }
