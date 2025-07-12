@@ -53,3 +53,7 @@ func print(val: Str) -> Void {
 func print(val: Bool) -> Void {
     C_VOLATILE("printf(val ? \"true\" : \"false\");");
 }
+
+func flush() -> Void {
+    C_VOLATILE("fflush(stdout);");
+}
