@@ -23,15 +23,15 @@ func readInt() -> Int {
 }
 
 func println(val: Int) -> Void {
-    C_VOLATILE("printf(\"%d\n\", val);");
+    C_VOLATILE("printf(\"%d\n", val);");
 }
 
 func println(val: Float) -> Void {
-    C_VOLATILE("printf(\"%f\n\", val);");
+    C_VOLATILE("printf(\"%f\n", val);");
 }
 
 func println(val: Str) -> Void {
-    C_VOLATILE("printf(\"%s\n\", val);");
+    C_VOLATILE("printf(\"%s\n", val);");
 }
 
 func println(val: Bool) -> Void {
@@ -39,15 +39,15 @@ func println(val: Bool) -> Void {
 }
 
 func print(val: Int) -> Void {
-    C_VOLATILE("printf(\"%d\", val);");
+    C_VOLATILE("printf(\"%d", val);");
 }
 
 func print(val: Float) -> Void {
-    C_VOLATILE("printf(\"%f\", val);");
+    C_VOLATILE("printf(\"%f", val);");
 }
 
 func print(val: Str) -> Void {
-    C_VOLATILE("printf(\"%s\", val);");
+    C_VOLATILE("printf(\"%s", val);");
 }
 
 func print(val: Bool) -> Void {
