@@ -1,5 +1,5 @@
 func strlen(str: Str) -> Int {
-    C_VOLATILE("return sizeof (str);");
+    C_VOLATILE("return strlen (str);");
 }
 
 func substr(s: Str, start: Int, length: Int) -> Str {
